@@ -10,12 +10,18 @@ class CategoriasController extends Controller
 {
     public function index()
     {
-        return Categorias::all();
+        return response()->json(Categorias::all(), 200);
     }
 
     public function store(Request $request)
     {
-        $categoria = Categorias::create($request->all());
+        $validatedData = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string'
+        ]);
+
+        $categoria = Categorias::create($validatedData);
+
         return response()->json($categoria, 201);
     }
 }
